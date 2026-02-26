@@ -1,5 +1,5 @@
-#cmake_minimum_required(VERSION 3.28)
-project(juego LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.28)
+project(vector3)
 
 
 # Estándar de C++
@@ -14,12 +14,10 @@ endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-find_package(SFML 3 COMPONENTS Graphics REQUIRED)
+
 
 
 # Ejecutable
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/main.cpp
-                               ${PROJECT_SOURCE_DIR}/src/Celula.cpp
                                )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics)
