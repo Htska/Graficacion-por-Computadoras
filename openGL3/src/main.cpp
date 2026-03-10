@@ -25,10 +25,19 @@ const char* fragmentShaderSource = R"(
     out vec4 FragColor;
     in vec3 vertexColor;
     in vec3 pos;
+    uniform float choose;
 
     void main()
     {
-        FragColor = vec4(vertexColor, 1.0);
+        if(pos.r <= 0.25 && pos.r >= -0.25 && pos.g <= 0.25 && pos.g >= -0.25 && (choose == 1.0 || choose == 3.0))
+        {
+            FragColor = vec4(1.0,0.0,0.0, 1.0);
+        } else if(pos.x*pos.x + (pos.y+0.7)*(pos.y+0.7)<= 0.09 && (choose == 2.0 || choose == 3.0))
+        {
+            FragColor = vec4(0.0,0.0,1.0,1.0);
+        }else {
+            FragColor = vec4(vertexColor, 1.0);
+        }
     }
 )";
 
@@ -139,9 +148,9 @@ int main()
     };*/
 
     float vertices[] = {
-        -1.0f,  1.0f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
-         0.0f,  1.0f, 0.0f
+        0.0f,  1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f,
+         1.0f,  -1.0f, 0.0f
          
         // 1.0f, -1.0f, 0.0f,
          //1.0f, 0.0f, 0.0f,
@@ -158,9 +167,9 @@ int main()
     };*/
 
     float colors1[] = {
-         1.f,  0.f, 0.f,
-         0.f,  1.f, 0.f,         
-         0.f,  0.f, 1.f
+         0.f,  1.f, 1.f,
+         0.f,  1.f, 1.f,         
+         0.f,  1.f, 1.f
          /*1.0f, 1.0f, 0.0f,
          1.0f, 0.0f, 1.0f,
          0.0f, 1.0f, 1.0f*/
@@ -205,7 +214,7 @@ int main()
     // Unbind the VAO
     glBindVertexArray(0);
 
-
+    float choose = 0.0f;
     // Render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -219,10 +228,23 @@ int main()
 
         // Draw the triangle
         glUseProgram(shaderProgram);
+        GLuint uniformTime = glGetUniformLocation(shaderProgram, "choose");
+        glUniform1f(uniformTime,choose);
         //glBindVertexArray(VAOcolor);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
-
+        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS){
+            choose = 1.0f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS){
+            choose = 2.0f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS){
+            choose = 3.0f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS){
+            choose = 0.0f;
+        }       
         // Swap buffers and poll IO events
         glfwSwapBuffers(window);
         glfwPollEvents();

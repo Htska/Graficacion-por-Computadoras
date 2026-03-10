@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <math.h>
+#include <cstdlib>
+#include <ctime>
 #include <vector>
 
 // Vertex Shader source code (GLSL 4.10)
@@ -26,7 +28,8 @@ const char* fragmentShaderSource = R"(
 
     void main()
     {
-        FragColor = vec4(0.0,1.0,0.0, 1.0);
+        FragColor = vec4(vertexColor, 1.0);
+        //FragColor = vec4(0.0,1.0,0.0,1.0);
     }
 )";
 
@@ -43,20 +46,34 @@ Point getMidpoint(Point p1, Point p2) {
 void generateSierpinski(int n, Point a, Point b, Point c, std::vector<float>& vertices) {
     // Caso base: empujamos X, Y y Z (0.0f) por cada vértice
     if (n == 1) {
+        // Generate and print a random number between 0.0 and 1.0
+        float randomR = static_cast<float>(std::rand()) / RAND_MAX;
+        float randomG = static_cast<float>(std::rand()) / RAND_MAX;
+        float randomB = static_cast<float>(std::rand()) / RAND_MAX;
         // Vértice 1 (Arriba)
         vertices.push_back(a.x);
         vertices.push_back(a.y);
         vertices.push_back(0.0f); // Coordenada Z
+        vertices.push_back(randomR);
+        vertices.push_back(randomG);
+        vertices.push_back(randomB);
+
 
         // Vértice 2 (Abajo a la izquierda)
         vertices.push_back(b.x);
         vertices.push_back(b.y);
         vertices.push_back(0.0f); // Coordenada Z
+        vertices.push_back(randomR);
+        vertices.push_back(randomG);
+        vertices.push_back(randomB);
 
         // Vértice 3 (Abajo a la derecha)
         vertices.push_back(c.x);
         vertices.push_back(c.y);
         vertices.push_back(0.0f); // Coordenada Z
+        vertices.push_back(randomR);
+        vertices.push_back(randomG);
+        vertices.push_back(randomB);
         return;
     }
 
@@ -74,6 +91,7 @@ void generateSierpinski(int n, Point a, Point b, Point c, std::vector<float>& ve
 std::vector<float> getSierpinskiLevel(int n) {
     std::vector<float> vertices;
     if (n < 1) return vertices;
+    std::srand(std::time(nullptr));
 
     Point a = { 0.0f,  1.0f};
     Point b = {-1.0f, -1.0f};
@@ -202,17 +220,18 @@ int main()
         0.0f,-1.0f,0.0f
     };*/
 
-    float colors1[] = {
+    /*float colors1[] = {
          1.f,  0.f, 0.f,
          0.f,  1.f, 0.f,         
          0.f,  0.f, 1.f,
          1.f,  0.f, 0.f,
          0.f,  1.f, 0.f,         
          0.f,  0.f, 1.f
-         /*1.0f, 1.0f, 0.0f,
+         /1.0f, 1.0f, 0.0f,
          1.0f, 0.0f, 1.0f,
-         0.0f, 1.0f, 1.0f*/
-    };
+         0.0f, 1.0f, 1.0f
+        };*/
+
 
     GLuint VBO, VAO;
     
@@ -227,30 +246,30 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
     //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);// Es iguaaaaal
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);// Es iguaaaaal
     glEnableVertexAttribArray(0);
     //
-    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
-    //glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+    glEnableVertexAttribArray(1);
 
     // Unbind the VAO
     //glBindVertexArray(0);
 
 
-    GLuint VBOcolor;//, VAOcolor;
+    //GLuint VBOcolor;//, VAOcolor;
     
     //glGenVertexArrays(1, &VAOcolor);
-    glGenBuffers(1, &VBOcolor);
+    //glGenBuffers(1, &VBOcolor);
 
     // Bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     //glBindVertexArray(VAOcolor);
     //glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBOcolor);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
+    //glBindBuffer(GL_ARRAY_BUFFER, VBOcolor);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3* sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3* sizeof(float), (void*)0);
+    //glEnableVertexAttribArray(1);
 
     // Unbind the VAO
     glBindVertexArray(0);
