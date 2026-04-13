@@ -58,8 +58,8 @@ const char* fragmentShaderSource = R"(
         float max_iterations = atime;
 
         // Checar en su compu si dejar 1600 u 800
-        float x = gl_FragCoord.x/1600;
-        float y = gl_FragCoord.y/1600;
+        float x = gl_FragCoord.x/800;
+        float y = gl_FragCoord.y/800;
 
         float x1 = (x + displacement.x) * zoom;
         float y1 = (y + displacement.y) * zoom;
