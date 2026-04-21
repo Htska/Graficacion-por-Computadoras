@@ -1,5 +1,5 @@
-# CamaraOrbital
-Orbital camera implementation in 3D using OpenGL.
+# Phong
+Phong material implementation
 
 # Execution
 To compile:
