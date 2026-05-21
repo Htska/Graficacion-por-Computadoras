@@ -1,4 +1,4 @@
-# Phong
+# SkyBox
 Phong material implementation
 
 # Execution
